@@ -7,14 +7,14 @@ import msvcrt
 
 
 def crearcuenta(): 
-    #Creacion de correo
+    #Creacion de correo de forma random y la contraseña 
     valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     Ynombre = ""
     Ynombre = Ynombre.join([choice(valores) for i in range(12)])
     dominio = "@yopmail.com"
     correo = Ynombre + dominio
 
-    #Creacion de cuenta
+    #Creacion de cuenta en la pagina tomando los valores y llenando estos en la misma
     browser = webdriver.Chrome()
     browser.get("https://mariakawaii.cl/mi-cuenta/")
     time.sleep(5)
@@ -33,7 +33,7 @@ def crearcuenta():
     login_attempt = browser.find_element_by_xpath("//*[@name='register']").click()
 
 
-    #Guardamos en txt
+    #Guardamos en txt el usuario creado
     guardar = correo + " " + Ynombre
     f = open ("usuarios.txt", "a")
     f.write(guardar + '\n')
@@ -42,6 +42,7 @@ def crearcuenta():
     
 
 def iniciosesion(DECISION):
+    #tomamos los usuarios creados en el archivo txt
     usuarios = open("usuarios.txt","r")
     contador = 0
     while(True):
@@ -52,7 +53,7 @@ def iniciosesion(DECISION):
         contador = contador + 1
     usuarios.close()
 
-
+    #elegimos la credencial a utilizar y separamos para obtener el correo y contraseña por separado
     credencial = int(input("Ingrese un numero de credencial: "))
 
     usuarios = open("usuarios.txt","r")
@@ -77,7 +78,7 @@ def iniciosesion(DECISION):
     usuarios.close()
 
 
-    #Iniciamos Sesion
+    #Iniciamos Sesion con los datos obtenidos ya separados
     browser = webdriver.Chrome()
     browser.get("https://mariakawaii.cl/mi-cuenta/")
     time.sleep(5)
@@ -96,9 +97,11 @@ def iniciosesion(DECISION):
     valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"    
     
     if(DECISION == 0):
+        #hasta aqui es inicio de sesion
         return
 
     else:
+        #en este punto se produce el cambio de contraseña ya teniendo la sesion iniciada
         browser.get("https://mariakawaii.cl/mi-cuenta/edit-account/")
 
         actual = C
@@ -160,6 +163,7 @@ def iniciosesion(DECISION):
         time.sleep(5)
 
 def reemplazar_linea(nombre_archivo, numero_linea, reemplazo):
+    #permite reemplazar la linea por las credenciales nuevas
     linea = open(nombre_archivo, 'r').readlines()
     linea[numero_linea] = reemplazo + '\n'
     out = open(nombre_archivo, 'w')
@@ -168,6 +172,7 @@ def reemplazar_linea(nombre_archivo, numero_linea, reemplazo):
 
 
 def reestablecer():
+    #permite restablecer la contraseña por el link adjuntando el correo del usuario que se encuentra en el archivo txt
     usuarios = open("usuarios.txt","r")
     contador = 0
     S = ""
@@ -202,14 +207,12 @@ def reestablecer():
 
     browser = webdriver.Chrome()
     browser.get("https://mariakawaii.cl/mi-cuenta/lost-password/")
-
-    print('AAAAAA: ' + S)
     na = browser.find_element_by_id("user_login")
     na.send_keys(S)
     login_attempt = browser.find_element_by_xpath("//*[@value='Restablecer contraseña']").click()
 
 
-
+#MAIN O MENÚ 
 print("1.- Crear cuenta")
 print("2.- Inicio de sesion")
 print("3.- Reestablecer contraseña")
