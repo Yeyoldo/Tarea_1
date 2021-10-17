@@ -1,45 +1,19 @@
-
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from random import choice
+import time
+import random
+import msvcrt
+import pyperclip as clipboard
+import keyboard
 
 def chileno():
     valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    usuarios = open("usuarios.txt","r")
-    contador = 0
-    while(True):
-        U = usuarios.readline()
-        if not U:
-            break
-        print(str(contador) + '.- Credenciales:' + U)
-        contador = contador + 1
-    usuarios.close()
-
-
-    credencial = int(input("Ingrese un numero de credencial: "))
-
-    usuarios = open("usuarios.txt","r")
-    contador = 0
-    S = ""
+    S = "SKACPPkcehrc@yopmail.com"
     C = ""
-
-    flag = True
-    while(flag):
-        U = usuarios.readline()
-        print(U)
-        if credencial == contador:
-            print("El usuario a utilizar es: " + U)
-            separar = U.split()
-            S = separar[0]
-            C = separar[1]
-            flag = False
-        contador = contador + 1
-        if not U:
-            print("Numero no valido")
-            break
-    usuarios.close()
-    browser = webdriver.Chrome()
-    
     
     for i in range (0,100):
-        C = C.join([choice(valores) for i in range(4,15)])
+        C = C.join([choice(valores) for i in range(12)])
         browser.get("https://mariakawaii.cl/mi-cuenta/")
         time.sleep(3)
         
@@ -60,41 +34,8 @@ def chileno():
 def europeo():
     
     valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    usuarios = open("usuariosE.txt","r")
-    contador = 0
-    while(True):
-        U = usuarios.readline()
-        if not U:
-            break
-        print(str(contador) + '.- Credenciales:' + U)
-        contador = contador + 1
-    usuarios.close()
-
-
-    credencial = int(input("Ingrese un numero de credencial: "))
-
-    usuarios = open("usuariosE.txt","r")
-    contador = 0
-    S = ""
+    S = "stMwIgwEeQn@yopmail.com"
     C = ""
-
-    flag = True
-    while(flag):
-        U = usuarios.readline()
-        print(U)
-        if credencial == contador:
-            print("El usuario a utilizar es: " + U)
-            separar = U.split()
-            S = separar[0]
-            C = separar[1]
-            flag = False
-        contador = contador + 1
-        if not U:
-            print("Numero no valido")
-            break
-    usuarios.close()
-
-
     #Iniciamos Sesion
     browser = webdriver.Chrome()
 
@@ -116,12 +57,12 @@ def europeo():
 
 print("1.- Sitio Chileno")
 print("2.- Sitio Europeo")
-entrada = input("Ingrese un numero")
+entrada = input("Ingrese un numero: ")
 
-if entrada == 1:
+if int(entrada) == 1:
     chileno()
 
-elif entrada == 2:
+elif int(entrada) == 2:
     europeo()
 else:
     print("Numero no valido")
