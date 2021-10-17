@@ -12,7 +12,7 @@ import keyboard
 
 
 def crearcuenta(): 
-    #Creacion de correo
+    #Creacion de correo random junto con la contraseña
     valores = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
     phone = "0123456789"
     Ynombre = ""
@@ -23,7 +23,7 @@ def crearcuenta():
     dominio = "@yopmail.com"
     correo = Ynombre + dominio
 
-    #Creacion de cuenta
+    #Creacion de cuenta y toma de id de la pagina para poder llenarlas
     browser = webdriver.Chrome()
     browser.get("https://www.telepizza.es/#registrarse")
     time.sleep(5)
@@ -49,13 +49,13 @@ def crearcuenta():
     login_attempt = browser.find_element_by_xpath("//*[@class='checkbox safari safari537 not_msie']").click()
     login_attempt = browser.find_element_by_xpath("//*[@class='checkbox safari safari537 not_msie']").click()
 
+    #no se pudo encontrar el path del boton por lo que se toman todos los botones se itera hsata encontrarlo
     for btn in browser.find_elements_by_tag_name('button'):
         if btn.get_attribute('class') == 'btn_submit':
-            print(btn.text)
             btn.click()
             break
         
-    #Guardamos en txt
+    #Guardamos en txt 
     guardar = correo + " " + Ynombre
     f = open ("usuariosE.txt", "a")
     f.write(guardar + '\n')
@@ -63,6 +63,7 @@ def crearcuenta():
 
 
 def iniciosesion(DECISION):
+    #iniciiamos sesion con las credenciales guardadas en el archivo txt tomando los datos por separado
     usuarios = open("usuariosE.txt","r")
     contador = 0
     while(True):
@@ -80,7 +81,7 @@ def iniciosesion(DECISION):
     contador = 0
     S = ""
     C = ""
-
+    
     flag = True
     while(flag):
         U = usuarios.readline()
@@ -97,8 +98,7 @@ def iniciosesion(DECISION):
             break
     usuarios.close()
 
-
-    #Iniciamos Sesion
+    #Ya teniendo las credenciales por separadas se procede a iniciar Sesion
     browser = webdriver.Chrome()
     browser.get("https://www.telepizza.es/#home_login_form")
     time.sleep(5)
@@ -116,9 +116,11 @@ def iniciosesion(DECISION):
 
     
     if(DECISION == 0):
+        #si solo se desea inicar sesion
         return
 
     else:
+        #en el caso de cambiar la contraseña ya teniendo la sesion iniciada se dirige a la pagina para hacer el cambio
         browser.get("https://www.telepizza.es/usuario/cuenta")
 
         time.sleep(3)
@@ -138,10 +140,11 @@ def iniciosesion(DECISION):
         confirmar = browser.find_element_by_xpath("/html/body/div[5]/div[1]/form/div[2]/div[2]/button").click()
 
         
-        #Registramos nueva contrasenia
+        #Registramos nueva contrasenia en el txt
         usuarios = open("usuariosE.txt","r")
         flag = True
         contador = 0
+        
         while(flag):
             U = usuarios.readline()
             if credencial == contador:
@@ -175,6 +178,7 @@ def iniciosesion(DECISION):
         
 
 def reemplazar_linea(nombre_archivo, numero_linea, reemplazo):
+    #permite reemplazar una linea por las credenciales nuevas
     linea = open(nombre_archivo, 'r').readlines()
     linea[numero_linea] = reemplazo + '\n'
     out = open(nombre_archivo, 'w')
@@ -183,6 +187,7 @@ def reemplazar_linea(nombre_archivo, numero_linea, reemplazo):
 
 
 def reestablecer():
+    #reestablecemos la contraseña haciendo uso de los datos guardados en el archivo txt separandolas 
     usuarios = open("usuariosE.txt","r")
     contador = 0
     S = ""
@@ -223,7 +228,7 @@ def reestablecer():
     login_attempt = browser.find_element_by_xpath("/html/body/div[5]/p/a").click()
 
 
-
+#main o menú
 print("1.- Crear cuenta")
 print("2.- Inicio de sesion")
 print("3.- Reestablecer contraseña")
